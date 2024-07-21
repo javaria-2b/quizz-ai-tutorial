@@ -1,8 +1,9 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import ProgressBar from "@/components/ProgressBar";
+import ProgressBar from "@/components/progressBar";
 import { ChevronLeft, X } from "lucide-react";
+import ResultCard from "./ResultCard";
 
 const questions = [
   {
@@ -153,13 +154,18 @@ export default function Home() {
     if (currentQuestion < questions.length - 1) {
       setcurrentQuestion(currentQuestion + 1);
     }
+
+
+    setSelectedAnswer(null);
+    setIsCorrect(null);
   };
+
 
 
   const handleAnswer = (answer) => {
     setSelectedAnswer(answer.id);
     const isCurrentCorrect = answer.isCorrect;
-    if(isCurrentCorrect){
+    if (isCurrentCorrect) {
       setScore(score + 1);
 
     }
@@ -192,7 +198,7 @@ export default function Home() {
             <div className="grid grid-cols-1 gap-6 mt-6">
               {questions[currentQuestion].answers.map((answer) => {
                 return (
-                  <Button key={answer.id} variant={"secondary"} onClick={()=> handleAnswer(answer)}>
+                  <Button key={answer.id} variant={"secondary"} onClick={() => handleAnswer(answer)}>
                     {answer.answerText}
                   </Button>
                 );
@@ -202,7 +208,7 @@ export default function Home() {
         )}{" "}
       </main>
       <footer className="footer pb-9 px-6 relative mb-0">
-        <p>{isCorrect ? 'correct': 'incorrect'}</p>
+        <ResultCard isCorrect={isCorrect} correctAnswer={questions[currentQuestion].answers.find(answer => answer.isCorrect === true)?.answerText} />
         <Button onClick={handleNext}>{!started ? "Start" : "Next"}</Button>
       </footer>
     </div>
